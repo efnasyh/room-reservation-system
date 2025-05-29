@@ -13,7 +13,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <!-- MPP Option -->
         <div class="group bg-white rounded-xl p-6 border hover:border-blue-600 transition duration-300 shadow hover:shadow-lg">
-            <img src="{{ asset('storage/app/public/logo/mpp.jpg') }}" alt="MPP Logo"
+            <img src="{{ asset('storage/logo/mpp.jpg') }}" alt="MPP Logo"
                  class="w-24 h-24 mx-auto mb-4 rounded-full object-cover border-2 border-blue-100 group-hover:border-blue-500 transition duration-300">
             <h4 class="text-xl font-semibold text-blue-700 mb-2">Majlis Perwakilan Pelajar Application</h4>
             <p class="text-gray-600 text-sm mb-4">For events with a budget below RM5,000</p>
@@ -25,7 +25,7 @@
 
         <!-- Admin Option -->
         <div class="group bg-white rounded-xl p-6 border hover:border-red-600 transition duration-300 shadow hover:shadow-lg">
-            <img src="{{ asset('storage/app/public/logo/hep.jpg') }}" alt="Admin Logo"
+            <img src="{{ asset('storage/logo/hep.jpg') }}" alt="Admin Logo"
                  class="w-24 h-24 mx-auto mb-4 rounded-full object-cover border-2 border-red-100 group-hover:border-red-500 transition duration-300">
             <h4 class="text-xl font-semibold text-red-700 mb-2">Pejabat Hal Ehwal Pelajar Application</h4>
             <p class="text-gray-600 text-sm mb-4">For events with a budget RM5,000 and above</p>
