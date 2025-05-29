@@ -55,7 +55,7 @@
                         <!-- Placeholder Image -->
                          @php
                             $fileName = strtolower(str_replace(' ', '_', $club->club_name)) . '.jpg';
-                            $imagePath = 'storage/club association/' . $fileName;
+                            $imagePath = 'storage/club_association/' . $fileName;
                         @endphp
 
                         <div class="h-40 bg-gray-200 flex items-center justify-center">
