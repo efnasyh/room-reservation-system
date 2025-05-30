@@ -61,7 +61,7 @@
                                     </a> -->
                                     <!-- <a href="{{ route('events.notify', $event->id) }}"
                                         class="btn text-white" style="background-color: #8B4513;">
-                                        📧 Notify Students
+                                        📧 Notify Students // takda
                                         </a> -->
 
                                     <!-- Total Registered Students -->
