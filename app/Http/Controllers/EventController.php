@@ -454,13 +454,26 @@ public function report(Request $request)
 //     }
 // }
 
-public function viewReport($eventId) //ORGANIZER -> REPORT ANALYSIS -> VIEW REPORT
+public function viewReport($eventId) // ORGANIZER -> REPORT ANALYSIS -> VIEW REPORT (NAK LETAK PIE CHART PASAL FACULTY)
 {
-    // Get the event with its student registrations and feedback
     $event = Event::with(['studentRegistrations', 'feedbacks'])->findOrFail($eventId);
 
-    return view('events.viewReport', compact('event'));
+    $facultyCounts = $event->studentRegistrations
+        ->groupBy('faculty')
+        ->map(function ($group) {
+            return $group->count();
+        });
+
+    return view('events.viewReport', compact('event', 'facultyCounts'));
 }
+
+// public function viewReport($eventId) //ORGANIZER -> REPORT ANALYSIS -> VIEW REPORT
+// {
+//     // Get the event with its student registrations and feedback
+//     $event = Event::with(['studentRegistrations', 'feedbacks'])->findOrFail($eventId);
+
+//     return view('events.viewReport', compact('event'));
+// }
 
 public function downloadPaperwork($eventId)
 {

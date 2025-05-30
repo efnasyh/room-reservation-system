@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
     use Illuminate\Http\Request;
     use Stripe\Stripe;
     use Stripe\Checkout\Session;
+    use Illuminate\Support\Facades\Mail;
+    use App\Mail\EventNotification;
+    use App\Models\Event;
+
     
     class PaymentController extends Controller
     {
@@ -76,10 +80,9 @@ namespace App\Http\Controllers;
 //     return redirect()->route('events.index')->withErrors('No registration data found.');
 // }
 
-public function paymentSuccess()
+public function paymentSuccess() // UPDATE SEBAB NAK HANTAR NOTI LEPAS BUAT PAYMENT
 {
     $data = session('registration_data');
-
     if ($data) {
         // Check if already registered to prevent duplicate
         $existing = \App\Models\StudentEvent::where('event_id', $data['event_id'])
@@ -102,15 +105,57 @@ public function paymentSuccess()
             ]);
         }
 
+        // ✅ Send Email Notification
+        $event = Event::find($data['event_id']);
+        Mail::to($data['email'])->send(new EventNotification($event, $data['student_name']));
+
         session()->forget('registration_data');
 
         return redirect()->route('events.upcoming')
-            ->with('success', 'Your payment was successful! Thank you for registering.');
+            ->with('success', 'Your payment was successful! Thank you for registering. A confirmation email has been sent.');
     }
 
     return redirect()->route('events.upcoming')
         ->with('error', 'Payment was successful, but we could not find your registration details.');
 }
+
+// public function paymentSuccess() // CODE SEBELUM UPDATE
+// {
+//     $data = session('registration_data');
+
+//     if ($data) {
+//         // Check if already registered to prevent duplicate
+//         $existing = \App\Models\StudentEvent::where('event_id', $data['event_id'])
+//             ->where(function ($query) use ($data) {
+//                 $query->where('email', $data['email'])
+//                       ->orWhere('matric_no', $data['matric_no']);
+//             })
+//             ->first();
+
+//         if (!$existing) {
+//             \App\Models\StudentEvent::create([
+//                 'user_id' => auth()->id(),
+//                 'event_id' => $data['event_id'],
+//                 'student_name' => $data['student_name'],
+//                 'matric_no' => $data['matric_no'],
+//                 'email' => $data['email'],
+//                 'phone' => $data['phone'],
+//                 'faculty' => $data['faculty'],
+//                 'payment_status' => 'Paid'
+//             ]);
+//         }
+
+//         session()->forget('registration_data');
+
+//         return redirect()->route('events.upcoming')
+//             ->with('success', 'Your payment was successful! Thank you for registering.');
+//     }
+
+//     return redirect()->route('events.upcoming')
+//         ->with('error', 'Payment was successful, but we could not find your registration details.');
+// }
+
+
 
 // public function paymentSuccess(Request $request)
 // {

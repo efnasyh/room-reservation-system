@@ -59,10 +59,10 @@
                                     <!-- <a href="{{ route('events.register', $event->id) }}" class="btn btn-primary">
                                         Create Register Event From for Student
                                     </a> -->
-                                    <a href="{{ route('events.notify', $event->id) }}"
+                                    <!-- <a href="{{ route('events.notify', $event->id) }}"
                                         class="btn text-white" style="background-color: #8B4513;">
                                         📧 Notify Students
-                                        </a>
+                                        </a> -->
 
                                     <!-- Total Registered Students -->
                                     <p class="mt-2 text-sm text-gray-700">

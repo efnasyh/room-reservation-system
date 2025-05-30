@@ -29,6 +29,7 @@
         @php $filter = request('filter', 'all'); @endphp
 
         @if ($filter === 'payments')
+            {{-- Payments Table --}}
             <div class="bg-white shadow rounded p-6 mb-6">
                 <h3 class="text-lg font-bold mb-4">Student Payments</h3>
                 @if ($event->studentRegistrations->count())
@@ -37,6 +38,7 @@
                             <tr>
                                 <th class="border px-4 py-2">Student Name</th>
                                 <th class="border px-4 py-2">Matric No</th>
+                                <th class="border px-4 py-2">Faculty</th>
                                 <th class="border px-4 py-2">Payment Status</th>
                             </tr>
                         </thead>
@@ -45,6 +47,7 @@
                                 <tr>
                                     <td class="border px-4 py-2">{{ $registration->student_name }}</td>
                                     <td class="border px-4 py-2">{{ $registration->matric_no }}</td>
+                                    <td class="border px-4 py-2">{{ $registration->faculty }}</td>
                                     <td class="border px-4 py-2">{{ $registration->payment_status ?? 'N/A' }}</td>
                                 </tr>
                             @endforeach
@@ -56,7 +59,8 @@
             </div>
 
         @elseif ($filter === 'feedback')
-            <div class="bg-white shadow rounded p-6">
+            {{-- Feedback Table & Bar Chart --}}
+                        <div class="bg-white shadow rounded p-6">
                 <h3 class="text-lg font-bold mb-4">Feedback</h3>
                 @if ($event->feedbacks->count())
                     <table class="table-auto w-full border border-gray-300">
@@ -106,6 +110,7 @@
                                 <th class="border px-4 py-2">No</th>
                                 <th class="border px-4 py-2">Student Name</th>
                                 <th class="border px-4 py-2">Matric No</th>
+                                <th class="border px-4 py-2">Faculty</th>
                                 <th class="border px-4 py-2">Payment Status</th>
                                 <th class="border px-4 py-2">Comment</th>
                                 <th class="border px-4 py-2">Suggestions</th>
@@ -121,6 +126,7 @@
                                     <td class="border px-4 py-2">{{ $index + 1 }}</td>
                                     <td class="border px-4 py-2">{{ $registration->student_name }}</td>
                                     <td class="border px-4 py-2">{{ $registration->matric_no }}</td>
+                                    <td class="border px-4 py-2">{{ $registration->faculty }}</td>
                                     <td class="border px-4 py-2">{{ $registration->payment_status ?? 'N/A' }}</td>
                                     <td class="border px-4 py-2">{{ $feedback->feedback_comments ?? '-' }}</td>
                                     <td class="border px-4 py-2">{{ $feedback->improvement_suggestions ?? '-' }}</td>
@@ -130,13 +136,22 @@
                         </tbody>
                     </table>
 
-                    {{-- Bar Chart --}}
-                    <div class="mt-12">
-                        <h3 class="text-lg font-bold mb-4 text-center">Feedback Rating Distribution</h3>
-                        <div class="max-w-xl mx-auto">
-                            <canvas id="feedbackRatingChart" class="w-full h-64"></canvas>
-                        </div>
-                    </div>
+{{-- Charts Side by Side --}}
+<div class="mt-12 flex justify-center gap-12 flex-wrap">
+
+    {{-- Feedback Rating Bar Chart --}}
+    <div class="max-w-xs w-full">
+        <h3 class="text-lg font-bold mb-4 text-center">Feedback Rating Distribution</h3>
+        <canvas id="feedbackRatingChart" class="mx-auto" style="max-width: 300px; max-height: 300px;"></canvas>
+    </div>
+
+    {{-- Faculty Pie Chart --}}
+    <div class="max-w-xs w-full">
+        <h3 class="text-lg font-bold mb-4 text-center">Registered Students by Faculty</h3>
+        <canvas id="facultyPieChart" class="mx-auto" style="max-width: 300px; max-height: 300px;"></canvas>
+    </div>
+
+</div>
                 @else
                     <p class="text-gray-600">No student data found for this event.</p>
                 @endif
@@ -151,9 +166,7 @@
         {{-- Feedback Rating Chart Script --}}
         <script>
             const allRatings = [1, 2, 3, 4, 5];
-
             const ratingRaw = @json($event->feedbacks->groupBy('rating')->map->count());
-
             const ratingLabels = allRatings.map(String);
             const ratingCounts = allRatings.map(r => ratingRaw[r] || 0);
 
@@ -178,9 +191,45 @@
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                stepSize: 1,      // show 1, 2, 3...
-                                precision: 0      // avoid decimal labels
+                                    stepSize: 1,
+                                    precision: 0
+                                }
                             }
+                        }
+                    }
+                });
+            }
+        </script>
+    @endif
+
+    @if ($event->studentRegistrations->count())
+        {{-- Faculty Pie Chart Script --}}
+        <script>
+            const facultyCounts = @json($facultyCounts);
+            const facultyLabels = Object.keys(facultyCounts);
+            const facultyData = Object.values(facultyCounts);
+
+            const pieCtx = document.getElementById('facultyPieChart')?.getContext('2d');
+            if (pieCtx) {
+                new Chart(pieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: facultyLabels,
+                        datasets: [{
+                            label: 'Students per Faculty',
+                            data: facultyData,
+                            backgroundColor: [
+                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#6366F1',
+                                '#EC4899', '#8B5CF6', '#22D3EE', '#F87171', '#34D399'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
                             }
                         }
                     }
