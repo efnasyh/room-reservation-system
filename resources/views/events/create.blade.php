@@ -90,11 +90,20 @@
                         <div class="alert alert-error">{{ $message }}</div>
                     @enderror
 
-                    <!-- Club Name (readonly) -->
+                    <!-- Club Name (readonly)
                     <div class="form-control w-full mb-4">
                         <label class="label"><span class="label-text">Club Name</span></label>
                         <input type="text" name="club_name" class="input input-bordered w-full bg-gray-100 cursor-not-allowed" value="{{ auth()->user()->club_name }}" readonly>
+                    </div> -->
+
+                    <!-- Club Name -->
+                    <div class="form-control w-full mb-4">
+                        <label class="label"><span class="label-text">Club Name</span></label>
+                        <input type="text" name="club_name" required class="input input-bordered w-full" placeholder="Enter club name" value="{{ old('club_name') }}">
                     </div>
+                    @error('club_name')
+                        <div class="alert alert-error">{{ $message }}</div>
+                    @enderror
 
                     <!-- Advisor Name -->
                     <div class="form-control w-full mb-4">
@@ -105,11 +114,20 @@
                         <div class="alert alert-error">{{ $message }}</div>
                     @enderror
 
-                   <!-- Email (readonly) -->
+                   <!-- Email (readonly)
 <div class="form-control w-full mb-4">
     <label class="label"><span class="label-text">Email</span></label>
     <input type="email" name="email" class="input input-bordered w-full bg-gray-100 cursor-not-allowed" value="{{ auth()->user()->email }}" readonly>
-</div>
+</div> -->
+
+ <div class="form-control w-full mb-4">
+                        <label class="label"><span class="label-text">Email</span></label>
+                        <input type="email" name="email" required class="input input-bordered w-full" placeholder="Enter email" value="{{ old('email') }}">
+                    </div>
+                    @error('email')
+                        <div class="alert alert-error">{{ $message }}</div>
+                    @enderror
+
 
                     <!-- Program Name -->
                     <div class="form-control w-full mb-4">
