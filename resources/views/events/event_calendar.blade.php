@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-md rounded-lg p-6">
-                <h3 class="font-bold text-2xl mb-4 text-center">Event Calendar</h3>
+                <h3 class="font-bold text-2xl mb-4 text-center">🗓️ Event Calendar</h3>
                 <!-- Calendar Container -->
                 <div id="calendar"></div>
             </div>

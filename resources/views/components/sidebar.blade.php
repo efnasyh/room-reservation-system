@@ -11,6 +11,12 @@
                     <span class="ml-3">Event Requested</span>
                 </a>
             </li>
+             <li>
+                <a href="{{ route('event.calendar') }}" class="flex items-center p-2 rounded-lg hover:bg-indigo-50 transition">
+                    <span class="text-lg">🗓️</span>
+                    <span class="ml-3">Calendar</span>
+                </a>
+            </li>
             <li>
                 <a href="{{ route('events.report') }}" class="flex items-center p-2 rounded-lg hover:bg-indigo-50 transition">
                     <span class="text-lg">📊</span>
@@ -35,6 +41,12 @@
                 <a href="{{ route('events.eventRequestedList') }}" class="flex items-center p-2 rounded-lg hover:bg-indigo-50 transition">
                     <span class="text-lg">📥</span>
                     <span class="ml-3">Event Requested</span>
+                </a>
+            </li>
+             <li>
+                <a href="{{ route('event.calendar') }}" class="flex items-center p-2 rounded-lg hover:bg-indigo-50 transition">
+                    <span class="text-lg">🗓️</span>
+                    <span class="ml-3">Calendar</span>
                 </a>
             </li>
             <li>

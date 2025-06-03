@@ -38,7 +38,7 @@
             @empty
                 <p class="text-gray-600 mb-10 italic">You have no events pending feedback submission.</p>
             @endforelse
-
+<div class="mt-6"></div>
             <!-- Submitted Feedback Section -->
             <h1 class="text-2xl font-semibold text-black-800 mt-12 mb-6">✅ Submitted Feedback</h1>
 

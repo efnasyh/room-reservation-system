@@ -5,45 +5,53 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div id="selection-screen" class="bg-gradient-to-br from-white via-gray-50 to-white p-10 rounded-3xl shadow-2xl max-w-3xl mx-auto text-center border border-gray-200">
-    <h3 class="text-3xl font-bold text-gray-800 mb-8">Choose Your Event Application Type</h3>
+<div class="py-16 bg-gradient-to-br from-blue-50 via-white to-pink-50">
+    <div class="max-w-4xl mx-auto px-6">
+        <div id="selection-screen" class="bg-white/80 backdrop-blur-lg p-10 rounded-3xl shadow-2xl border border-gray-200 text-center">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
+                            📋 Choose Your Event Application Type
+            </div>
+            <div class="mt-6"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                <!-- MPP Option -->
+                <div class="group bg-white rounded-2xl p-6 border hover:border-blue-500 transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-1">
+                    <img src="{{ asset('storage/logo/mpp.jpg') }}" alt="MPP Logo"
+                         class="w-24 h-24 mx-auto mb-4 rounded-full object-cover border-4 border-blue-100 group-hover:border-blue-400 transition duration-300">
+                    <h4 class="text-xl font-semibold text-blue-700 mb-2">Majlis Perwakilan Pelajar</h4>
+                    <p class="text-gray-600 text-sm mb-6">For events with a budget below RM5,000</p>
+                    <button id="mpp-button"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition duration-200 shadow-lg hover:scale-105">
+                        Select MPP
+                    </button>
+                </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <!-- MPP Option -->
-        <div class="group bg-white rounded-xl p-6 border hover:border-blue-600 transition duration-300 shadow hover:shadow-lg">
-            <img src="{{ asset('storage/logo/mpp.jpg') }}" alt="MPP Logo"
-                 class="w-24 h-24 mx-auto mb-4 rounded-full object-cover border-2 border-blue-100 group-hover:border-blue-500 transition duration-300">
-            <h4 class="text-xl font-semibold text-blue-700 mb-2">Majlis Perwakilan Pelajar Application</h4>
-            <p class="text-gray-600 text-sm mb-4">For events with a budget below RM5,000</p>
-            <button id="mpp-button"
-                    class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200 shadow">
-                Select MPP
-            </button>
-        </div>
-
-        <!-- Admin Option -->
-        <div class="group bg-white rounded-xl p-6 border hover:border-red-600 transition duration-300 shadow hover:shadow-lg">
-            <img src="{{ asset('storage/logo/hep.jpg') }}" alt="Admin Logo"
-                 class="w-24 h-24 mx-auto mb-4 rounded-full object-cover border-2 border-red-100 group-hover:border-red-500 transition duration-300">
-            <h4 class="text-xl font-semibold text-red-700 mb-2">Pejabat Hal Ehwal Pelajar Application</h4>
-            <p class="text-gray-600 text-sm mb-4">For events with a budget RM5,000 and above</p>
-            <button id="admin-button"
-                    class="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition duration-200 shadow">
-                Select HEP
-            </button>
+                <!-- Admin Option -->
+                <div class="group bg-white rounded-2xl p-6 border hover:border-red-500 transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-1">
+                    <img src="{{ asset('storage/logo/hep.jpg') }}" alt="HEP Logo"
+                         class="w-24 h-24 mx-auto mb-4 rounded-full object-cover border-4 border-red-100 group-hover:border-red-400 transition duration-300">
+                    <h4 class="text-xl font-semibold text-red-700 mb-2">Pejabat Hal Ehwal Pelajar</h4>
+                    <p class="text-gray-600 text-sm mb-6">For events with a budget RM5,000 and above</p>
+                    <button id="admin-button"
+                        class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full transition duration-200 shadow-lg hover:scale-105">
+                        Select HEP
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 
             <div id="apply-event-form" class="hidden bg-white p-6 rounded-lg shadow-md">
                 <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <input type="hidden" name="application_type" id="application-type">
-
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
+                            📝 Fill The Event Application Form
+                        </h3>
+</div>
                     <div class="form-control w-full mb-4">
                         <label class="label">
                             <span class="label-text">Applicant Name</span>
@@ -82,14 +90,11 @@
                         <div class="alert alert-error">{{ $message }}</div>
                     @enderror
 
-                    <!-- Club Name -->
+                    <!-- Club Name (readonly) -->
                     <div class="form-control w-full mb-4">
                         <label class="label"><span class="label-text">Club Name</span></label>
-                        <input type="text" name="club_name" required class="input input-bordered w-full" placeholder="Enter club name" value="{{ old('club_name') }}">
+                        <input type="text" name="club_name" class="input input-bordered w-full bg-gray-100 cursor-not-allowed" value="{{ auth()->user()->club_name }}" readonly>
                     </div>
-                    @error('club_name')
-                        <div class="alert alert-error">{{ $message }}</div>
-                    @enderror
 
                     <!-- Advisor Name -->
                     <div class="form-control w-full mb-4">
@@ -100,14 +105,11 @@
                         <div class="alert alert-error">{{ $message }}</div>
                     @enderror
 
-                    <!-- Email -->
-                    <div class="form-control w-full mb-4">
-                        <label class="label"><span class="label-text">Email</span></label>
-                        <input type="email" name="email" required class="input input-bordered w-full" placeholder="Enter email" value="{{ old('email') }}">
-                    </div>
-                    @error('email')
-                        <div class="alert alert-error">{{ $message }}</div>
-                    @enderror
+                   <!-- Email (readonly) -->
+<div class="form-control w-full mb-4">
+    <label class="label"><span class="label-text">Email</span></label>
+    <input type="email" name="email" class="input input-bordered w-full bg-gray-100 cursor-not-allowed" value="{{ auth()->user()->email }}" readonly>
+</div>
 
                     <!-- Program Name -->
                     <div class="form-control w-full mb-4">
@@ -205,4 +207,19 @@
             document.getElementById('allocation-requested').min = 5000;
         });
     </script>
+    <!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+<script>
+    Swal.fire({
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6'
+    });
+</script>
+@endif
+
 </x-app-layout>

@@ -84,7 +84,8 @@ class EventController extends Controller
     ]);
 
     // Redirect with success message
-    return redirect()->route('events.create')->with('message', 'Event applied successfully!');
+    return redirect()->route('events.create')->with('success', 'Event applied successfully!');
+    
 }
 
 

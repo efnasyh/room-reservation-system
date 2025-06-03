@@ -4,7 +4,19 @@
             {{ $event->program_name }} - Report
         </h2>
     </x-slot>
+    <!-- Back Button -->
+<div class="mb-6">
+    <a href="{{ route('events.userOrganized') }}"
+       class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-semibold shadow-md transition duration-200 no-underline">
+        ← Back
+    </a>
+</div>
 
+     <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
+                            📊 Report Details
+            </h3>
+            </div>
     <div class="py-6 max-w-6xl mx-auto">
         {{-- Filter Buttons --}}
         <div class="flex justify-center gap-4 mb-6 flex-wrap">
@@ -104,7 +116,7 @@
             <div class="bg-white shadow rounded p-6 mb-6">
                 <h3 class="text-lg font-bold mb-4">All Report Data</h3>
                 @if ($event->studentRegistrations->count() > 0)
-                    <table class="table-auto w-full border border-gray-300 mb-6">
+                    <table class="table-auto w-full border border-black-300 mb-6">
                         <thead class="bg-gray-200">
                             <tr>
                                 <th class="border px-4 py-2">No</th>

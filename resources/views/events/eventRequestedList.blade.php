@@ -102,10 +102,13 @@
 
                                 <!-- Comment Form -->
                                 <div>
-                                    <form action="{{ route('events.addComment', $event->id) }}" method="POST" class="space-y-2">
+                                    <form id="comment-form-{{ $event->id }}" action="{{ route('events.addComment', $event->id) }}" method="POST" class="space-y-2 comment-form">
                                         @csrf
-                                        <textarea name="comment" rows="2" class="w-full border border-gray-300 rounded-md p-3 focus:outline-indigo-500" placeholder="💬 Add a comment..." required></textarea>
-                                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md shadow">
+                                        <textarea name="comment" rows="2" 
+                                            class="w-full border border-indigo-700 rounded-md p-3 focus:outline-indigo-500" 
+                                            placeholder="💬 Add a comment..." required></textarea>
+                                        <button type="submit" 
+                                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md shadow">
                                             Submit Comment
                                         </button>
                                     </form>
@@ -134,4 +137,34 @@
 
     <!-- Alpine.js -->
     <script src="//unpkg.com/alpinejs" defer></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all comment forms
+            document.querySelectorAll('.comment-form').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent immediate submit
+
+                    Swal.fire({
+                        title: 'Submit Comment?',
+                        text: "Are you sure you want to submit this comment?",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#aaa',
+                        confirmButtonText: 'Yes, submit it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Submit the form if confirmed
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </x-app-layout>
