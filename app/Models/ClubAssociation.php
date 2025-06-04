@@ -14,6 +14,8 @@ class clubAssociation extends Model
         'description',
         'user_id',
         'event_id',
+        'contact',
+        'objective',
         
     ];
 
