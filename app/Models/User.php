@@ -52,4 +52,5 @@ class User extends Authenticatable
         return $this->hasMany(RoomReservation::class, 'user_id');
     }
     
+    
 }
