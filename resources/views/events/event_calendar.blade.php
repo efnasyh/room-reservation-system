@@ -31,9 +31,6 @@
     </ul>
 </div>
 
-
-
-
     <!-- Include FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js"></script>
