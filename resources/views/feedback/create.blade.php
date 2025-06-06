@@ -18,19 +18,14 @@
         ← Back
     </a>
 </div>
-
-
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                         <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
-                            Feedback Form
+                           📝 Feedback Form for {{ $event->program_name }} Program
                         </h3>
-
 </div>
     <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="border-2 border-black rounded-xl p-6 bg-white shadow-lg">
-                
-
                 <!-- Event Info -->
                 <div class="mb-6">
                     <h3 class="text-xl font-extrabold mb-2">{{ strtoupper($event->program_name) }}</h3>
@@ -38,14 +33,11 @@
                     <p><strong>LOCATION</strong> {{ $event->location }}</p>
                     <p><strong>FEE: RM</strong> {{ $event->fee }}</p>
                 </div>
-
                 <form action="{{ route('feedback.store', $event->id) }}" method="POST">
                     @csrf
-                    <!-- Linear Scale Questions -->
                     @php
                         $scaleLabels = ['1', '2', '3', '4', '5'];
                     @endphp
-
                     <!-- Event Content -->
                     <div class="mb-6">
                         <label class="block font-bold mb-2">The event content was relevant and informative.</label>
@@ -62,7 +54,6 @@
                             @endforeach
                         </div>
                     </div>
-
                     <!-- Speaker Quality -->
                     <div class="mb-6">
                         <label class="block font-bold mb-2">The speaker(s) were engaging and informative.</label>
@@ -79,7 +70,6 @@
                             @endforeach
                         </div>
                     </div>
-
                     <!-- Event Organization -->
                     <div class="mb-6">
                         <label class="block font-bold mb-2">The event was well-organized.</label>
@@ -102,13 +92,11 @@
                         <label class="block font-bold mb-2">What did you enjoy the most about the event?</label>
                         <input type="text" name="feedback_comments" class="w-full border-2 rounded-full px-4 py-2" required>
                     </div>
-
                     <!-- Improvement Suggestions -->
                     <div class="mb-6">
                         <label class="block font-bold mb-2">What improvement would you suggest for next time?</label>
                         <input type="text" name="improvement_suggestions" class="w-full border-2 rounded-full px-4 py-2">
                     </div>
-
                     <!-- Overall Rating (Star) -->
                     <div class="mb-6">
                         <label class="block font-bold mb-2">Overall Star Rating:</label>
@@ -119,7 +107,6 @@
                             @endfor
                         </div>
                     </div>
-
                     <!-- Submit Button -->
                     <div class="text-right">
                         <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition duration-200">
@@ -127,7 +114,6 @@
                         </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

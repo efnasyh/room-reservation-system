@@ -26,6 +26,12 @@
                 </div>
             @endif
 
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <h3 class="text-3xl font-extrabold text-gray-900 tracking-wide mb-4">
+                    📋 Fill the Registration Event Form
+                </h3>
+            </div>
+            <div class="mt-6"></div>
             <!-- Event Summary -->
             <div class="bg-white border border-gray-300 shadow-md rounded-lg mb-6 p-6">
                 <h3 class="font-bold text-xl">{{ $event->program_name }}</h3>

@@ -7,16 +7,13 @@
 
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-6xl mx-auto px-4">
-
             <!-- Feedback Prompt -->
             <h1 class="text-2xl font-semibold text-gray-800 mb-6">📝 Write Feedback for Past Events</h1>
-
             @php
                 $writeFeedbackEvents = $events->filter(function ($event) {
                     return \Carbon\Carbon::parse($event->date)->isPast() && $event->feedbacks->isEmpty();
                 });
             @endphp
-
             @forelse ($writeFeedbackEvents as $event)
                 <div class="bg-white border-l-4 border-blue-500 shadow-md rounded-xl p-6 mb-6">
                     <div class="flex justify-between items-center mb-2">
@@ -41,13 +38,11 @@
 <div class="mt-6"></div>
             <!-- Submitted Feedback Section -->
             <h1 class="text-2xl font-semibold text-black-800 mt-12 mb-6">✅ Submitted Feedback</h1>
-
             @php
                 $submittedFeedbackEvents = $events->filter(function ($event) {
                     return \Carbon\Carbon::parse($event->date)->isPast() && !$event->feedbacks->isEmpty();
                 });
             @endphp
-
             @forelse ($submittedFeedbackEvents as $event)
                 <div class="bg-green-50 border-l-4 border-green-600 shadow-md rounded-xl p-6 mb-6">
                     <div class="flex justify-between items-center mb-2">
@@ -75,7 +70,6 @@
                             @endif
                         @endfor
                     </div>
-
                 </div>
             @empty
                 <p class="text-gray-600 italic">You haven't submitted any feedback yet.</p>

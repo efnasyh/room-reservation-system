@@ -60,7 +60,7 @@
             <p><strong>Date:</strong> {{ $event->date }}</p>
             <p><strong>Location:</strong> {{ $event->location }}</p>
             <p><strong>Club:</strong> {{ $event->club_name }}</p>
-            <p><strong>Fee:</strong>RM {{ $event->fee }}.00</p>
+            <p><strong>Fee:</strong>RM {{ $event->fee }}</p>
         </div>
 
         <p>We look forward to your active participation and hope the event provides valuable and enriching experiences.</p>

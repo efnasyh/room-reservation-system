@@ -239,5 +239,4 @@
     });
 </script>
 @endif
-
 </x-app-layout>

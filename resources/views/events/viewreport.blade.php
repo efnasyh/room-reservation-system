@@ -11,10 +11,9 @@
         ← Back
     </a>
 </div>
-
      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                         <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
-                            📊 Report Details
+                            📊 {{ $event->program_name }} Report Details
             </h3>
             </div>
     <div class="py-6 max-w-6xl mx-auto">
