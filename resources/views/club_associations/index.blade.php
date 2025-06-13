@@ -8,7 +8,7 @@
     <div class="py-12 bg-gray-100">
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
             <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
-                📊 All Events From All Clubs
+                🏫 Clubs & Associations
             </h3>
         </div>
 
@@ -30,7 +30,7 @@
             <!-- Search Bar -->
             <form method="GET" action="{{ route('club_associations.index') }}" class="flex items-center mb-4">
                 <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Search by event name, date, or club"
+                    placeholder="Search by club name"
                     class="border rounded px-3 py-2 mr-2 w-full sm:w-1/3 focus:outline-none focus:ring focus:border-blue-300">
                 <button type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

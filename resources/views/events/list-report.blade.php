@@ -119,118 +119,130 @@
 
                     <!-- Scripts -->
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-                    <script>
-                        async function downloadEventListPDF() {
-                            const { jsPDF } = window.jspdf;
-                            const doc = new jsPDF();
-                            doc.setFontSize(18);
-                            doc.setFont(undefined, 'bold');
-                            doc.text('Event List Report', 20, 20);
-                            doc.setFontSize(10);
-                            doc.setFont(undefined, 'normal');
-                            doc.text('Generated on: ' + new Date().toLocaleDateString(), 20, 28);
+                   <script>
+    let chartInstance;
 
-                            let y = 40;
-                            doc.setFontSize(12);
-                            doc.setFont(undefined, 'bold');
-                            doc.text('No.', 20, y);
-                            doc.text('Event Name', 30, y);
-                            doc.text('Date', 90, y);
-                            doc.text('Club', 120, y);
-                            doc.text('Status', 160, y);
-                            y += 5;
-                            doc.line(20, y, 190, y);
-                            y += 8;
+    async function downloadEventListPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-                            const events = @json($events);
-                            doc.setFont(undefined, 'normal');
+        const events = @json($events);
 
-                            events.forEach((event, i) => {
-                                if (y > 270) {
-                                    doc.addPage();
-                                    y = 20;
-                                }
-                                doc.text(String(i + 1), 20, y);
-                                doc.text(event.program_name.substring(0, 25), 30, y);
-                                doc.text(event.date, 90, y);
-                                doc.text(event.club_name.substring(0, 20), 120, y);
-                                doc.text(event.status, 160, y);
-                                y += 8;
-                            });
+        doc.setFontSize(16);
+        doc.text("📋 Event List Report", 14, 15);
+        doc.setFontSize(10);
+        doc.text("Generated on: " + new Date().toLocaleString(), 14, 22);
 
-                            const filename = `Event_List_Report_${new Date().toISOString().split('T')[0]}.pdf`;
-                            doc.save(filename);
-                        }
+        const tableData = events.map((event, index) => [
+            index + 1,
+            event.program_name,
+            event.date,
+            event.club_name,
+            event.status
+        ]);
 
-                        document.addEventListener("DOMContentLoaded", function () {
-                            // Chart
-                            const events = @json($events);
-                            let approvedCount = 0;
-                            let rejectedCount = 0;
+        doc.autoTable({
+            head: [["No", "Event Name", "Date", "Club Name", "Status"]],
+            body: tableData,
+            startY: 30,
+            theme: 'striped',
+            styles: {
+                fontSize: 9,
+                cellPadding: 3
+            },
+            headStyles: {
+                fillColor: [52, 152, 219]
+            },
+            columnStyles: {
+                0: { cellWidth: 10 },
+                1: { cellWidth: 50 },
+                2: { cellWidth: 25 },
+                3: { cellWidth: 55 },
+                4: { cellWidth: 25 }
+            }
+        });
 
-                            events.forEach(event => {
-                                const status = event.status.toLowerCase();
-                                if (status === 'approved') approvedCount++;
-                                else if (status === 'rejected') rejectedCount++;
-                            });
+        // 🟠 Convert pie chart to image and add to PDF
+        const chartCanvas = document.getElementById("eventStatusPieChart");
+        const imageData = chartCanvas.toDataURL("image/png", 1.0);
 
-                            const ctx = document.getElementById('eventStatusPieChart').getContext('2d');
-                            new Chart(ctx, {
-                                type: 'pie',
-                                data: {
-                                    labels: ['Approved', 'Rejected'],
-                                    datasets: [{
-                                        label: 'Event Status',
-                                        data: [approvedCount, rejectedCount],
-                                        backgroundColor: ['#34D399', '#EF4444'],
-                                        hoverOffset: 10
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    plugins: {
-                                        legend: { position: 'bottom' },
-                                        title: {
-                                            display: true,
-                                            text: 'Total Approved vs Rejected Events'
-                                        },
-                                        datalabels: {
-                                            color: '#fff',
-                                            font: {
-                                                weight: 'bold',
-                                                size: 14
-                                            },
-                                            formatter: value => value
-                                        }
-                                    }
-                                },
-                                plugins: [ChartDataLabels]
-                            });
+        doc.addPage();
+        doc.setFontSize(14);
+        doc.text("📈 Event Status Pie Chart", 14, 20);
+        doc.addImage(imageData, 'PNG', 40, 30, 130, 100); // adjust width/height as needed
 
-                            // Animated counters
-                            document.querySelectorAll(".counter").forEach(counter => {
-                                const target = parseInt(counter.getAttribute("data-target"));
-                                let count = 0;
-                                const duration = 1000; // total animation time in ms
-                                const start = performance.now();
+        // Footer
+        doc.setFontSize(9);
+        doc.text('Page ' + doc.internal.getNumberOfPages(), 180, 290, { align: 'right' });
 
-                                const step = (timestamp) => {
-                                    const elapsed = timestamp - start;
-                                    const progress = Math.min(elapsed / duration, 1);
-                                    counter.textContent = Math.floor(progress * target);
-                                    if (progress < 1) {
-                                        requestAnimationFrame(step);
-                                    } else {
-                                        counter.textContent = target;
-                                    }
-                                };
-                                requestAnimationFrame(step);
-                            });
-                        });
-                    </script>
+        const filename = `Event_List_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(filename);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const events = @json($events);
+        let approvedCount = 0;
+        let rejectedCount = 0;
+
+        events.forEach(event => {
+            const status = event.status.toLowerCase();
+            if (status === 'approved') approvedCount++;
+            else if (status === 'rejected') rejectedCount++;
+        });
+
+        const ctx = document.getElementById('eventStatusPieChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Approved', 'Rejected'],
+                datasets: [{
+                    label: 'Event Status',
+                    data: [approvedCount, rejectedCount],
+                    backgroundColor: ['#34D399', '#EF4444'],
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: {
+                        display: true,
+                        text: 'Total Approved vs Rejected Events'
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: value => value
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // Animated counters
+        document.querySelectorAll(".counter").forEach(counter => {
+            const target = parseInt(counter.getAttribute("data-target"));
+            let count = 0;
+            const duration = 1000;
+            const start = performance.now();
+
+            const step = (timestamp) => {
+                const elapsed = timestamp - start;
+                const progress = Math.min(elapsed / duration, 1);
+                counter.textContent = Math.floor(progress * target);
+                if (progress < 1) requestAnimationFrame(step);
+                else counter.textContent = target;
+            };
+            requestAnimationFrame(step);
+        });
+    });
+</script>
+
                 </div>
             </div>
         </div>

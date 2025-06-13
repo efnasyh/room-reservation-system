@@ -34,7 +34,6 @@ class EventController extends Controller
     // Handle form submission and store event in the database
     public function store(Request $request)
 {
-    // Validate the request
     $request->validate([
         'applicant_name' => 'required|string|max:255',
         'matric_no' => 'required|string|max:50',
@@ -51,19 +50,14 @@ class EventController extends Controller
         'participants' => 'required|integer|min:1',
         'paperwork' => 'required|file|mimes:pdf|max:2048', // Ensure it's a PDF
     ]);
-
-    // Get authenticated user ID
     $userId = Auth::id();
 
-    // Ensure user is logged in
     if (!$userId) {
         return redirect()->route('login')->with('error', 'You must log in to apply for an event.');
     }
 
-    // Store the uploaded paperwork
     $paperworkPath = $request->file('paperwork')->store('paperwork', 'public'); // Store the file
 
-    // Create the event record
     Event::create([
         'user_id' => $userId,
         'applicant_name' => $request->applicant_name,
@@ -82,10 +76,7 @@ class EventController extends Controller
         'fee' => $request->fee,
         'status' => 'pending',
     ]);
-
-    // Redirect with success message
     return redirect()->route('events.create')->with('success', 'Event applied successfully!');
-    
 }
 
 

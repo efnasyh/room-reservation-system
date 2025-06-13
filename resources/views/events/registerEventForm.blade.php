@@ -31,7 +31,7 @@
                     📋 Fill the Registration Event Form
                 </h3>
             </div>
-            <div class="mt-6"></div>
+
 
             <!-- Event Summary -->
             <div class="bg-white border border-gray-300 shadow-md rounded-lg mb-6 p-6">
