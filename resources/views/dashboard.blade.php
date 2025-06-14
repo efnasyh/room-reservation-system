@@ -10,11 +10,10 @@
             <div class="bg-white overflow-hidden shadow-md sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     
-                        @php
+                    @php
                         $role = auth()->user()->role;
                         $userId = auth()->id();
 
-                        $pending = \App\Models\Event::where('status', 'pending')->count();
                         $upcoming = \App\Models\Event::where('date', '>=', now())->count();
                         $approved = \App\Models\Event::where('status', 'approved')->count();
                         $rejected = \App\Models\Event::where('status', 'rejected')->count();
@@ -29,11 +28,20 @@
                             ->pluck('event_id')->unique();
 
                         $feedbackNotSubmitted = \App\Models\Event::whereIn('id', $registeredEventIds)
-                            ->whereDate('date', '<=', now())  // <-- FIXED here!
+                            ->whereDate('date', '<=', now())
                             ->whereNotIn('id', $submittedFeedbackEventIds)
                             ->count();
 
                         $feedbackSubmitted = $submittedFeedbackEventIds->count();
+
+                        // NEW: Determine who the application is for based on allocation
+                        $pendingMpp = \App\Models\Event::where('status', 'pending')
+                            ->where('allocation_requested', '<', 5000)
+                            ->count();
+
+                        $pendingAdmin = \App\Models\Event::where('status', 'pending')
+                            ->where('allocation_requested', '>=', 5000)
+                            ->count();
                     @endphp
 
                     {{-- STUDENT --}}
@@ -88,12 +96,14 @@
                     @elseif ($role === 'mpp' || $role === 'admin')
                         <div class="mt-6 p-6 bg-yellow-100 rounded-xl shadow text-yellow-800">
                             <h3 class="text-xl font-bold mb-1">👋 Welcome, {{ strtoupper($role) }}!</h3>
-                            <p>You can now oversee applications, approve events, and manage student requests.</p>
+                            <p>You can now oversee events applications, approve events, and generate detailed reports.</p>
                         </div>
 
                         <div class="mt-6 flex gap-6 flex-wrap">
                             <div class="flex-1 min-w-[240px] p-6 bg-orange-100 text-orange-800 rounded-xl shadow text-center">
-                                <div class="text-4xl font-extrabold">{{ $pending }}</div>
+                                <div class="text-4xl font-extrabold">
+                                    {{ $role === 'mpp' ? $pendingMpp : $pendingAdmin }}
+                                </div>
                                 <div class="mt-2 font-medium">⏳ Pending Events</div>
                             </div>
 

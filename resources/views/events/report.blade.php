@@ -81,9 +81,15 @@
                     </div>
 
 <!-- Pie Chart -->
-<div class="mt-8 flex justify-center">
-    <canvas id="eventsByClubPieChart" width="300" height="300"></canvas>
+<div class="mt-12">
+    <h4 class="text-center text-lg font-semibold text-gray-800 mb-4">📈 Total Events by Club</h4>
+    <div class="flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow p-4 w-full max-w-md sm:max-w-lg">
+            <canvas id="eventsByClubPieChart" style="width:100% !important; height:auto !important;"></canvas>
+        </div>
+    </div>
 </div>
+
 
                 </div>
             </div>
@@ -120,6 +126,7 @@
                 data: {
                     labels: filteredData.map(e => e.club_name),
                     datasets: [{
+                        label: 'Total Events',
                         data: filteredData.map(e => e.total_events),
                         backgroundColor: filteredData.map((_, i) => `hsl(${i * 360 / filteredData.length}, 70%, 50%)`)
                     }]
@@ -132,7 +139,7 @@
                             font: { weight: 'bold', size: 14 }
                         },
                         legend: { position: 'bottom' },
-                        title: { display: true, text: 'Total Events by Club' }
+                        
                     }
                 },
                 plugins: [ChartDataLabels]
