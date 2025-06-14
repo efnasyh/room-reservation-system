@@ -14,7 +14,9 @@
                         $role = auth()->user()->role;
                         $userId = auth()->id();
 
-                        $upcoming = \App\Models\Event::where('date', '>=', now())->count();
+                        $upcoming = \App\Models\Event::where('status', 'approved')
+                        ->whereDate('date', '>=', now()->toDateString())
+                        ->count();
                         $approved = \App\Models\Event::where('status', 'approved')->count();
                         $rejected = \App\Models\Event::where('status', 'rejected')->count();
 
