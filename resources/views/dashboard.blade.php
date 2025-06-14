@@ -9,9 +9,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-md sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-
-                    @php
+                    
+                        @php
                         $role = auth()->user()->role;
                         $userId = auth()->id();
 
@@ -23,44 +22,48 @@
                         $clubEventsTotal = \App\Models\Event::where('user_id', $userId)->count();
                         $clubEventsPending = \App\Models\Event::where('user_id', $userId)->where('status', 'pending')->count();
 
-                        $registeredEvents = \App\Models\StudentEvent::where('user_id', $userId)->pluck('event_id')->unique();
-                        $submittedFeedback = \App\Models\Feedback::where('user_id', $userId)->pluck('event_id')->unique();
-                        $notYetFeedback = $registeredEvents->diff($submittedFeedback)->count();
+                        $registeredEventIds = \App\Models\StudentEvent::where('user_id', $userId)
+                            ->pluck('event_id')->unique();
+
+                        $submittedFeedbackEventIds = \App\Models\Feedback::where('user_id', $userId)
+                            ->pluck('event_id')->unique();
+
+                        $feedbackNotSubmitted = \App\Models\Event::whereIn('id', $registeredEventIds)
+                            ->whereDate('date', '<=', now())  // <-- FIXED here!
+                            ->whereNotIn('id', $submittedFeedbackEventIds)
+                            ->count();
+
+                        $feedbackSubmitted = $submittedFeedbackEventIds->count();
                     @endphp
 
                     {{-- STUDENT --}}
-@if ($role === 'student')
-    <div class="mt-6 p-6 bg-blue-100 rounded-xl shadow text-blue-800 text-center">
-        <h3 class="text-xl font-bold mb-1">🎓 Welcome, Student!</h3>
-        <p>You can now explore events, register, and provide feedback.</p>
-    </div>
+                    @if ($role === 'student')
+                        <div class="mt-6 p-6 bg-blue-100 rounded-xl shadow text-blue-800 text-center">
+                            <h3 class="text-xl font-bold mb-1">🎓 Welcome, Student!</h3>
+                            <p>You can now explore events, register, and provide feedback.</p>
+                        </div>
 
-    <!-- Counter Grid: 2 rows x 2 columns -->
-    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center max-w-3xl mx-auto">
-        <!-- Upcoming Events -->
-        <div class="w-full p-6 bg-green-100 text-green-800 rounded-xl shadow text-center">
-            <div class="text-4xl font-extrabold">{{ $upcoming }}</div>
-            <div class="mt-2 font-medium">📅 Upcoming Events</div>
-        </div>
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center max-w-3xl mx-auto">
+                            <div class="w-full p-6 bg-green-100 text-green-800 rounded-xl shadow text-center">
+                                <div class="text-4xl font-extrabold">{{ $upcoming }}</div>
+                                <div class="mt-2 font-medium">📅 Upcoming Events</div>
+                            </div>
 
-        <!-- Registered Events -->
-        <div class="w-full p-6 bg-blue-100 text-blue-800 rounded-xl shadow text-center">
-            <div class="text-4xl font-extrabold">{{ $registeredEvents->count() }}</div>
-            <div class="mt-2 font-medium">📝 Registered Events</div>
-        </div>
+                            <div class="w-full p-6 bg-blue-100 text-blue-800 rounded-xl shadow text-center">
+                                <div class="text-4xl font-extrabold">{{ $registeredEventIds->count() }}</div>
+                                <div class="mt-2 font-medium">📝 Registered Events</div>
+                            </div>
 
-        <!-- Feedback Submitted -->
-        <div class="w-full p-6 bg-yellow-100 text-yellow-800 rounded-xl shadow text-center">
-            <div class="text-4xl font-extrabold">{{ $submittedFeedback->count() }}</div>
-            <div class="mt-2 font-medium">⭐ Feedback Submitted</div>
-        </div>
+                            <div class="w-full p-6 bg-yellow-100 text-yellow-800 rounded-xl shadow text-center">
+                                <div class="text-4xl font-extrabold">{{ $feedbackSubmitted }}</div>
+                                <div class="mt-2 font-medium">⭐ Feedback Submitted</div>
+                            </div>
 
-        <!-- Feedback Not Submitted -->
-        <div class="w-full p-6 bg-red-100 text-red-800 rounded-xl shadow text-center">
-            <div class="text-4xl font-extrabold">{{ $notYetFeedback }}</div>
-            <div class="mt-2 font-medium">⏳ Feedback Not Submitted</div>
-        </div>
-    </div>
+                            <div class="w-full p-6 bg-red-100 text-red-800 rounded-xl shadow text-center">
+                                <div class="text-4xl font-extrabold">{{ $feedbackNotSubmitted }}</div>
+                                <div class="mt-2 font-medium">⏳ Feedback Not Submitted</div>
+                            </div>
+                        </div>
 
                     {{-- ORGANIZER --}}
                     @elseif ($role === 'user')
