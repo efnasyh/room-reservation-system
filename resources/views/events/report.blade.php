@@ -21,47 +21,24 @@
                         </button>
                     </div>
 
-                    <!-- Animated Counters Row -->
+                    <!-- Counters -->
                     <div class="flex flex-wrap md:flex-nowrap gap-4 overflow-x-auto pb-4">
-                        <div class="flex-1 min-w-[200px] bg-blue-100 p-4 rounded-lg shadow flex flex-col items-center">
-                            <div class="text-blue-600 mb-2">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 0h6m-3 4a9 9 0 110-18 9 9 0 010 18z"/>
-                                </svg>
+                        @foreach ([
+                            ['color' => 'blue', 'label' => 'Total Events', 'value' => $totalEvents],
+                            ['color' => 'green', 'label' => 'Residential College Clubs', 'value' => $residentialClubCount],
+                            ['color' => 'yellow', 'label' => 'Uniform Clubs', 'value' => $uniformClubCount],
+                            ['color' => 'pink', 'label' => 'Association / Clubs', 'value' => $associationClubCount],
+                        ] as $item)
+                            <div class="flex-1 min-w-[200px] bg-{{ $item['color'] }}-100 p-4 rounded-lg shadow flex flex-col items-center">
+                                <div class="text-{{ $item['color'] }}-600 mb-2">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-600">{{ $item['label'] }}</p>
+                                <p class="text-2xl font-bold counter" data-target="{{ $item['value'] }}">0</p>
                             </div>
-                            <p class="text-sm text-gray-600">Total Events</p>
-                            <p class="text-2xl font-bold counter" data-target="{{ $totalEvents }}">0</p>
-                        </div>
-
-                        <div class="flex-1 min-w-[200px] bg-green-100 p-4 rounded-lg shadow flex flex-col items-center">
-                            <div class="text-green-600 mb-2">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l6 6-6 6M21 7l-6 6 6 6"/>
-                                </svg>
-                            </div>
-                            <p class="text-sm text-gray-600">Residential College Clubs</p>
-                            <p class="text-2xl font-bold counter" data-target="{{ $residentialClubCount }}">0</p>
-                        </div>
-
-                        <div class="flex-1 min-w-[200px] bg-yellow-100 p-4 rounded-lg shadow flex flex-col items-center">
-                            <div class="text-yellow-600 mb-2">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a4 4 0 10-8 0v2m0 0v10m8-10v10m-8 0h8"/>
-                                </svg>
-                            </div>
-                            <p class="text-sm text-gray-600">Uniform Clubs</p>
-                            <p class="text-2xl font-bold counter" data-target="{{ $uniformClubCount }}">0</p>
-                        </div>
-
-                        <div class="flex-1 min-w-[200px] bg-pink-100 p-4 rounded-lg shadow flex flex-col items-center">
-                            <div class="text-pink-600 mb-2">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-4 0v10m0 0H8m4 0h4"/>
-                                </svg>
-                            </div>
-                            <p class="text-sm text-gray-600">Association / Clubs</p>
-                            <p class="text-2xl font-bold counter" data-target="{{ $associationClubCount }}">0</p>
-                        </div>
+                        @endforeach
                     </div>
 
                     <!-- Filters -->
@@ -103,10 +80,11 @@
                         </table>
                     </div>
 
-                    <!-- Pie Chart -->
-                    <div class="mt-8 max-w-3xl mx-auto">
-                        <canvas id="eventsByClubPieChart" width="400" height="400"></canvas>
-                    </div>
+<!-- Pie Chart -->
+<div class="mt-8 flex justify-center">
+    <canvas id="eventsByClubPieChart" width="300" height="300"></canvas>
+</div>
+
                 </div>
             </div>
         </div>
@@ -132,16 +110,18 @@
                 update();
             });
 
-            // Pie chart
+            // Filter clubs with event > 0 for chart
+            const eventsPerClubRaw = @json($eventsPerClub);
+            const filteredData = eventsPerClubRaw.filter(e => e.total_events > 0);
+
             const ctx = document.getElementById('eventsByClubPieChart').getContext('2d');
-            const eventsPerClub = @json($eventsPerClub);
             new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: eventsPerClub.map(e => e.club_name),
+                    labels: filteredData.map(e => e.club_name),
                     datasets: [{
-                        data: eventsPerClub.map(e => e.total_events),
-                        backgroundColor: eventsPerClub.map((_, i) => `hsl(${i * 360 / eventsPerClub.length}, 70%, 50%)`)
+                        data: filteredData.map(e => e.total_events),
+                        backgroundColor: filteredData.map((_, i) => `hsl(${i * 360 / filteredData.length}, 70%, 50%)`)
                     }]
                 },
                 options: {

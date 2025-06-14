@@ -77,37 +77,41 @@
         color: #FFC107;
     }
 
-    .container {
-        z-index: 2;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 160px 20px 80px;
-        animation: fadeIn 1s ease-out;
-    }
-    .welcome-text {
-        font-size: 4rem;
-        font-weight: 700;
-        margin-bottom: 20px;
-        max-width: 900px;
-        line-height: 1.2;
-        color: #111;
-    }
+.container {
+    z-index: 2;
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 140px 20px 60px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 1s ease-out;
+}
 
-    /* ONLY font changed here for subtitle */
-    .subtitle {
-        font-family: 'Rubik', sans-serif;
-        font-size: 1.5rem;
-        font-weight: 500;
-        max-width: 700px;
-        margin-bottom: 40px;
-        /* Keep original color - no change */
-        color: #333;
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
-    }
+.welcome-text {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    max-width: 100%;
+    line-height: 1.2;
+    color: #111;
+    word-wrap: break-word;
+}
+
+.subtitle {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    max-width: 700px;
+    margin-bottom: 40px;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
+    word-wrap: break-word;
+}
+
 
     .button-group {
         display: flex;
@@ -241,25 +245,26 @@
         </div>
     </nav>
 
-    <div class="container">
-        <h1 class="welcome-text">UTHM CAMPUS EVENT MANAGEMENT SYSTEM</h1>
-        <p class="subtitle">
-            Empowering Campus Life Through Events by Manage, Discover, and Participate in Events at UTHM — All in One Platform
-        </p>
+<div class="container">
+    <h1 class="welcome-text">UTHM CAMPUS EVENT MANAGEMENT SYSTEM</h1>
+    <p class="subtitle">
+        Empowering Campus Life Through Events by Manage, Discover, and Participate in Events at UTHM — All in One Platform
+    </p>
 
-        @if (Route::has('login'))
-            <div class="button-group">
-                @auth
+    @if (Route::has('login'))
+        <div class="button-group">
+            @auth
                 <a href="{{ url('/dashboard') }}">Go to Dashboard</a>
-                @else
+            @else
                 <a href="{{ route('login') }}">Log In</a>
                 @if (Route::has('register'))
-                <a href="{{ route('register') }}">Register</a>
+                    <a href="{{ route('register') }}">Register</a>
                 @endif
-                @endauth
-            </div>
-        @endif
-    </div>
+            @endauth
+        </div>
+    @endif
+</div>
+
 
     <div class="section" id="vision">
         <h2>Our Vision & Mission</h2>

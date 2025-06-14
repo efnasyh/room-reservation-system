@@ -5,13 +5,12 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-gray-100">
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
-                🏫 Clubs & Associations
-            </h3>
-        </div>
-
+<div class="py-12 bg-gray-100">
+    <div class="text-center">
+        <h3 class="text-2xl font-bold text-gray-800 tracking-wide">
+            🏫 Clubs & Associations
+        </h3>
+    </div>
         <div class="mt-6"></div>
 
         <div class="w-full px-6 mx-auto">
